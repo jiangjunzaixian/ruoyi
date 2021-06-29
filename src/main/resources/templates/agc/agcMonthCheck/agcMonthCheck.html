@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('AGC月考核列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>时间：</label>
+                                <input type="text" name="time"/>
+                            </li>
+                            <li>
+                                <label>场站：</label>
+                                <input type="text" name="standName"/>
+                            </li>
+                            <li>
+                                <label>可用率：</label>
+                                <input type="text" name="availability"/>
+                            </li>
+                            <li>
+                                <label>速率：</label>
+                                <input type="text" name="speed"/>
+                            </li>
+                            <li>
+                                <label>合格率：</label>
+                                <input type="text" name="qualified"/>
+                            </li>
+                            <li>
+                                <label>响应时间：</label>
+                                <input type="text" name="responseTime"/>
+                            </li>
+                            <li>
+                                <label>可用率考核分：</label>
+                                <input type="text" name="availabilityScore"/>
+                            </li>
+                            <li>
+                                <label>速率考核分：</label>
+                                <input type="text" name="speedScore"/>
+                            </li>
+                            <li>
+                                <label>合格率考核分：</label>
+                                <input type="text" name="qualifiedScore"/>
+                            </li>
+                            <li>
+                                <label>响应时间考核分：</label>
+                                <input type="text" name="responseTimeScore"/>
+                            </li>
+                            <li>
+                                <label>考核总分：</label>
+                                <input type="text" name="sumScore"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="agc:agcMonthCheck:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="agc:agcMonthCheck:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="agc:agcMonthCheck:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="agc:agcMonthCheck:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('agc:agcMonthCheck:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('agc:agcMonthCheck:remove')}]];
+        var prefix = ctx + "agc/agcMonthCheck";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "AGC月考核",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: '',
+                    visible: false
+                },
+                {
+                    field: 'time',
+                    title: '时间'
+                },
+                {
+                    field: 'standName',
+                    title: '场站'
+                },
+                {
+                    field: 'availability',
+                    title: '可用率'
+                },
+                {
+                    field: 'speed',
+                    title: '速率'
+                },
+                {
+                    field: 'qualified',
+                    title: '合格率'
+                },
+                {
+                    field: 'responseTime',
+                    title: '响应时间'
+                },
+                {
+                    field: 'availabilityScore',
+                    title: '可用率考核分'
+                },
+                {
+                    field: 'speedScore',
+                    title: '速率考核分'
+                },
+                {
+                    field: 'qualifiedScore',
+                    title: '合格率考核分'
+                },
+                {
+                    field: 'responseTimeScore',
+                    title: '响应时间考核分'
+                },
+                {
+                    field: 'sumScore',
+                    title: '考核总分'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

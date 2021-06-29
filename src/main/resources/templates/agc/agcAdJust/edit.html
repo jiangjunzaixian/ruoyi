@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改AGC单次考核')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-agcAdJust-edit" th:object="${mdAgcAdjust}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">场站名称：</label>
+                <div class="col-sm-8">
+                    <input name="standName" th:field="*{standName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">指令下发时间：</label>
+                <div class="col-sm-8">
+                    <input name="startTime" th:field="*{startTime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">响应结束时间：</label>
+                <div class="col-sm-8">
+                    <input name="endTime" th:field="*{endTime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">开始功率：</label>
+                <div class="col-sm-8">
+                    <input name="startValue" th:field="*{startValue}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">结束功率：</label>
+                <div class="col-sm-8">
+                    <input name="endValue" th:field="*{endValue}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">下发指令值：</label>
+                <div class="col-sm-8">
+                    <input name="orderValue" th:field="*{orderValue}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">响应时刻：</label>
+                <div class="col-sm-8">
+                    <input name="respTime" th:field="*{respTime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">响应时刻功率：</label>
+                <div class="col-sm-8">
+                    <input name="respValue" th:field="*{respValue}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">响应时间：</label>
+                <div class="col-sm-8">
+                    <input name="respTimeValue" th:field="*{respTimeValue}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">调节时间：</label>
+                <div class="col-sm-8">
+                    <input name="adjustTime" th:field="*{adjustTime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">调节量：</label>
+                <div class="col-sm-8">
+                    <input name="agcQua" th:field="*{agcQua}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">调节速率：</label>
+                <div class="col-sm-8">
+                    <input name="avgRate" th:field="*{avgRate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">考核分：</label>
+                <div class="col-sm-8">
+                    <input name="checkScore" th:field="*{checkScore}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">考核原因：</label>
+                <div class="col-sm-8">
+                    <input name="checkReason" th:field="*{checkReason}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "agc/agcAdJust";
+        $("#form-agcAdJust-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-agcAdJust-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

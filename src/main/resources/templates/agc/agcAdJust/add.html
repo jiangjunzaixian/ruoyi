@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增AGC单次考核')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-agcAdJust-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">场站名称：</label>
+                <div class="col-sm-8">
+                    <input name="standName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">指令下发时间：</label>
+                <div class="col-sm-8">
+                    <input name="startTime" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">响应结束时间：</label>
+                <div class="col-sm-8">
+                    <input name="endTime" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">开始功率：</label>
+                <div class="col-sm-8">
+                    <input name="startValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">结束功率：</label>
+                <div class="col-sm-8">
+                    <input name="endValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">下发指令值：</label>
+                <div class="col-sm-8">
+                    <input name="orderValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">响应时刻：</label>
+                <div class="col-sm-8">
+                    <input name="respTime" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">响应时刻功率：</label>
+                <div class="col-sm-8">
+                    <input name="respValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">响应时间：</label>
+                <div class="col-sm-8">
+                    <input name="respTimeValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">调节时间：</label>
+                <div class="col-sm-8">
+                    <input name="adjustTime" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">调节量：</label>
+                <div class="col-sm-8">
+                    <input name="agcQua" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">调节速率：</label>
+                <div class="col-sm-8">
+                    <input name="avgRate" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">考核分：</label>
+                <div class="col-sm-8">
+                    <input name="checkScore" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">考核原因：</label>
+                <div class="col-sm-8">
+                    <input name="checkReason" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "agc/agcAdJust"
+        $("#form-agcAdJust-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-agcAdJust-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

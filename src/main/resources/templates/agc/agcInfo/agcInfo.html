@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('AGC信息列表')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label class="font-noraml">场站名称：</label>
+                                <input class="form-control" type="text" name="numberName" id="numberName"/>
+                            </li>
+                            <li>
+                                <label>时间：</label>
+                                <input class="form-control" size="16" type="text"  name="startTime" id ="startTime"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" id="searchEcharts" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="agc:agcInfo:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+               <!-- <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="agc:agcInfo:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="agc:agcInfo:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>-->
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="agc:agcInfo:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table">
+                <div class="echarts" id="echats"></div>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+     <th:block th:include="include :: footer" />
+     <th:block th:include="include :: echarts-js" />
+     <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('agc:agcInfo:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('agc:agcInfo:remove')}]];
+        var prefix = ctx + "agc/agcInfo";
+        var times="";
+        var sjpower="";
+        var jhpower="";
+
+        $(function() {
+            $("#startTime").datetimepicker({
+                format: "yyyy-mm-dd",
+                minView: "month",
+                autoclose: true
+            });
+            getEchartsData ();
+            var  lineChart = echarts.init(document.getElementById("echats"));
+
+           /*function randomData() {
+                now = new Date(+now + oneDay);
+                value = value + Math.random() * 21 - 10;
+                return {
+                    name: now.toString(),
+                    value: [
+                        [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
+                        Math.round(value)
+                    ]
+                };
+           }*/
+            /*var data = [];
+            var now = +new Date(1997, 9, 3);
+            var oneDay = 24 * 3600 * 1000;
+            var value = Math.random() * 1000;
+            for (var i = 0; i < 1000; i++) {
+                data.push(randomData());
+            }*/
+
+            option = {
+                title: {
+                    text: '动态数据 + 时间坐标轴'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function (params) {
+                        params = params[0];
+                        var date = new Date(params.name);
+                        return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
+                    },
+                    axisPointer: {
+                        animation: false
+                    }
+                },
+                xAxis: {
+                    type: 'time',
+                    splitLine: {
+                        show: false
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    boundaryGap: [0, '100%'],
+                    splitLine: {
+                        show: false
+                    }
+                },
+                series: [{
+                    name: '模拟数据',
+                    type: 'line',
+                    showSymbol: false,
+                    hoverAnimation: false,
+                    data: data
+                }]
+            };
+
+            setInterval(function () {
+
+                for (var i = 0; i < 5; i++) {
+                    data.shift();
+                    data.push(randomData());
+                }
+
+                myChart.setOption({
+                    series: [{
+                        data: data
+                    }]
+                });
+            }, 1000);
+
+
+           /*var  lineoption = {
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        dataView: {readOnly: false},
+                        restore: {},
+                    }
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['实际出力','计划出力']
+                },
+                grid:{
+                    x:40,
+                    x2:40,
+                    y2:24
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : []
+                    }
+                ],
+                yAxis : [
+                    {
+                        name: '单位：MW',
+                        type : 'value',
+                    }
+                ],
+                series : [
+                    {
+                        name:'实际功率',
+                        type:'line',
+                        smooth: true,
+                        showSymbol: false,
+                        data:[]
+                    },
+                    {
+                        name:'短期功率预测',
+                        type:'line',
+                        smooth: true,
+                        showSymbol: false,
+                        data:[],
+                    }
+                ]
+            };
+            lineChart.setOption(lineoption);*/
+
+
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "AGC信息",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: '',
+                    visible: false
+                },
+                {
+                    field: 'number',
+                    title: '场站编号'
+                },
+                {
+                    field: 'numberName',
+                    title: '场站名称'
+                },
+                {
+                    field: 'time',
+                    title: '时间'
+                },
+                {
+                    field: 'value',
+                    title: '实际功率'
+                },
+                {
+                    field: 'instructions',
+                    title: '下发指令'
+                },
+                {
+                    field: 'agcState',
+                    title: 'agc投退状态'
+                },
+                {
+                    field: 'powerState',
+                    title: '限电状态'
+                },
+                {
+                    field: 'sort',
+                    title: '排序'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        $("#searchEcharts").click(function (){
+            getEchartsData ();
+        })
+        function  getEchartsData (){
+            debugger
+            var numberName = $("#numberName").val();
+            var startTime =  $("#startTime").val();
+            $.ajax({
+                type:"post",
+                url:prefix+"/getEchartsList",
+                data:{
+                    time:startTime,
+                    numberName:numberName
+                },
+                dataType:"json",
+                success: function(data){
+                    for(var i=0;i<data.rows.length;i++){
+                        debugger
+                        times =data.rows[i].time;
+                        sjpower = data.rows[i].value;
+                        jhpower = data.rows[i].instructions;
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

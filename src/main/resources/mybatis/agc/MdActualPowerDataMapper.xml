@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.agc.agcInfo.mapper.MdActualPowerDataMapper">
+    
+    <resultMap type="MdActualPowerData" id="MdActualPowerDataResult">
+        <result property="id"    column="id"    />
+        <result property="number"    column="number"    />
+        <result property="numberName"    column="number_name"    />
+        <result property="time"    column="time"    />
+        <result property="value"    column="value"    />
+        <result property="instructions"    column="instructions"    />
+        <result property="agcState"    column="agc_state"    />
+        <result property="powerState"    column="power_state"    />
+        <result property="sort"    column="sort"    />
+    </resultMap>
+
+    <sql id="selectMdActualPowerDataVo">
+        select id, number, number_name, time, value, instructions, agc_state, power_state, sort from md_actual_power_data
+    </sql>
+
+    <select id="selectMdActualPowerDataList" parameterType="MdActualPowerData" resultMap="MdActualPowerDataResult">
+        <include refid="selectMdActualPowerDataVo"/>
+        <where>  
+            <if test="number != null  and number != ''"> and number = #{number}</if>
+            <if test="numberName != null  and numberName != ''"> and number_name like concat('%', #{numberName}, '%')</if>
+            <if test="time != null  and time != ''"> and time = #{time}</if>
+            <if test="value != null "> and value = #{value}</if>
+            <if test="instructions != null "> and instructions = #{instructions}</if>
+            <if test="agcState != null "> and agc_state = #{agcState}</if>
+            <if test="powerState != null "> and power_state = #{powerState}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+        </where>
+    </select>
+    
+    <select id="selectMdActualPowerDataById" parameterType="Long" resultMap="MdActualPowerDataResult">
+        <include refid="selectMdActualPowerDataVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMdActualPowerData" parameterType="MdActualPowerData" useGeneratedKeys="true" keyProperty="id">
+        insert into md_actual_power_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="number != null">number,</if>
+            <if test="numberName != null">number_name,</if>
+            <if test="time != null">time,</if>
+            <if test="value != null">value,</if>
+            <if test="instructions != null">instructions,</if>
+            <if test="agcState != null">agc_state,</if>
+            <if test="powerState != null">power_state,</if>
+            <if test="sort != null">sort,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="number != null">#{number},</if>
+            <if test="numberName != null">#{numberName},</if>
+            <if test="time != null">#{time},</if>
+            <if test="value != null">#{value},</if>
+            <if test="instructions != null">#{instructions},</if>
+            <if test="agcState != null">#{agcState},</if>
+            <if test="powerState != null">#{powerState},</if>
+            <if test="sort != null">#{sort},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMdActualPowerData" parameterType="MdActualPowerData">
+        update md_actual_power_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="number != null">number = #{number},</if>
+            <if test="numberName != null">number_name = #{numberName},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="value != null">value = #{value},</if>
+            <if test="instructions != null">instructions = #{instructions},</if>
+            <if test="agcState != null">agc_state = #{agcState},</if>
+            <if test="powerState != null">power_state = #{powerState},</if>
+            <if test="sort != null">sort = #{sort},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMdActualPowerDataById" parameterType="Long">
+        delete from md_actual_power_data where id = #{id}
+    </delete>
+
+    <delete id="deleteMdActualPowerDataByIds" parameterType="String">
+        delete from md_actual_power_data where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

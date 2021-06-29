@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.agc.agcAdJust.mapper.MdAgcAdjustMapper">
+    
+    <resultMap type="MdAgcAdjust" id="MdAgcAdjustResult">
+        <result property="id"    column="id"    />
+        <result property="standName"    column="stand_name"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="startValue"    column="start_value"    />
+        <result property="endValue"    column="end_value"    />
+        <result property="orderValue"    column="order_value"    />
+        <result property="respTime"    column="resp_time"    />
+        <result property="respValue"    column="resp_value"    />
+        <result property="respTimeValue"    column="resp_time_value"    />
+        <result property="adjustTime"    column="adjust_time"    />
+        <result property="agcQua"    column="agc_qua"    />
+        <result property="avgRate"    column="avg_rate"    />
+        <result property="checkScore"    column="check_score"    />
+        <result property="checkReason"    column="check_reason"    />
+    </resultMap>
+
+    <sql id="selectMdAgcAdjustVo">
+        select id, stand_name, start_time, end_time, start_value, end_value, order_value, resp_time, resp_value, resp_time_value, adjust_time, agc_qua, avg_rate, check_score, check_reason from md_agc_adjust
+    </sql>
+
+    <select id="selectMdAgcAdjustList" parameterType="MdAgcAdjust" resultMap="MdAgcAdjustResult">
+        <include refid="selectMdAgcAdjustVo"/>
+        <where>  
+            <if test="standName != null  and standName != ''"> and stand_name like concat('%', #{standName}, '%')</if>
+            <if test="startTime != null  and startTime != ''"> and start_time = #{startTime}</if>
+            <if test="endTime != null  and endTime != ''"> and end_time = #{endTime}</if>
+            <if test="startValue != null "> and start_value = #{startValue}</if>
+            <if test="endValue != null "> and end_value = #{endValue}</if>
+            <if test="orderValue != null "> and order_value = #{orderValue}</if>
+            <if test="respTime != null  and respTime != ''"> and resp_time = #{respTime}</if>
+            <if test="respValue != null "> and resp_value = #{respValue}</if>
+            <if test="respTimeValue != null "> and resp_time_value = #{respTimeValue}</if>
+            <if test="adjustTime != null "> and adjust_time = #{adjustTime}</if>
+            <if test="agcQua != null "> and agc_qua = #{agcQua}</if>
+            <if test="avgRate != null "> and avg_rate = #{avgRate}</if>
+            <if test="checkScore != null "> and check_score = #{checkScore}</if>
+            <if test="checkReason != null  and checkReason != ''"> and check_reason = #{checkReason}</if>
+        </where>
+    </select>
+    
+    <select id="selectMdAgcAdjustById" parameterType="Long" resultMap="MdAgcAdjustResult">
+        <include refid="selectMdAgcAdjustVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMdAgcAdjust" parameterType="MdAgcAdjust" useGeneratedKeys="true" keyProperty="id">
+        insert into md_agc_adjust
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="standName != null">stand_name,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="startValue != null">start_value,</if>
+            <if test="endValue != null">end_value,</if>
+            <if test="orderValue != null">order_value,</if>
+            <if test="respTime != null">resp_time,</if>
+            <if test="respValue != null">resp_value,</if>
+            <if test="respTimeValue != null">resp_time_value,</if>
+            <if test="adjustTime != null">adjust_time,</if>
+            <if test="agcQua != null">agc_qua,</if>
+            <if test="avgRate != null">avg_rate,</if>
+            <if test="checkScore != null">check_score,</if>
+            <if test="checkReason != null">check_reason,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="standName != null">#{standName},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="startValue != null">#{startValue},</if>
+            <if test="endValue != null">#{endValue},</if>
+            <if test="orderValue != null">#{orderValue},</if>
+            <if test="respTime != null">#{respTime},</if>
+            <if test="respValue != null">#{respValue},</if>
+            <if test="respTimeValue != null">#{respTimeValue},</if>
+            <if test="adjustTime != null">#{adjustTime},</if>
+            <if test="agcQua != null">#{agcQua},</if>
+            <if test="avgRate != null">#{avgRate},</if>
+            <if test="checkScore != null">#{checkScore},</if>
+            <if test="checkReason != null">#{checkReason},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMdAgcAdjust" parameterType="MdAgcAdjust">
+        update md_agc_adjust
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="standName != null">stand_name = #{standName},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="startValue != null">start_value = #{startValue},</if>
+            <if test="endValue != null">end_value = #{endValue},</if>
+            <if test="orderValue != null">order_value = #{orderValue},</if>
+            <if test="respTime != null">resp_time = #{respTime},</if>
+            <if test="respValue != null">resp_value = #{respValue},</if>
+            <if test="respTimeValue != null">resp_time_value = #{respTimeValue},</if>
+            <if test="adjustTime != null">adjust_time = #{adjustTime},</if>
+            <if test="agcQua != null">agc_qua = #{agcQua},</if>
+            <if test="avgRate != null">avg_rate = #{avgRate},</if>
+            <if test="checkScore != null">check_score = #{checkScore},</if>
+            <if test="checkReason != null">check_reason = #{checkReason},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMdAgcAdjustById" parameterType="Long">
+        delete from md_agc_adjust where id = #{id}
+    </delete>
+
+    <delete id="deleteMdAgcAdjustByIds" parameterType="String">
+        delete from md_agc_adjust where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

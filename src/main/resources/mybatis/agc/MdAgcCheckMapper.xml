@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.agc.agcMonthCheck.mapper.MdAgcCheckMapper">
+    
+    <resultMap type="MdAgcCheck" id="MdAgcCheckResult">
+        <result property="id"    column="id"    />
+        <result property="time"    column="time"    />
+        <result property="standName"    column="stand_name"    />
+        <result property="availability"    column="availability"    />
+        <result property="speed"    column="speed"    />
+        <result property="qualified"    column="qualified"    />
+        <result property="responseTime"    column="response_time"    />
+        <result property="availabilityScore"    column="availability_score"    />
+        <result property="speedScore"    column="speed_score"    />
+        <result property="qualifiedScore"    column="qualified_score"    />
+        <result property="responseTimeScore"    column="response_time_score"    />
+        <result property="sumScore"    column="sum_score"    />
+    </resultMap>
+
+    <sql id="selectMdAgcCheckVo">
+        select id, time, stand_name, availability, speed, qualified, response_time, availability_score, speed_score, qualified_score, response_time_score, sum_score from md_agc_check
+    </sql>
+
+    <select id="selectMdAgcCheckList" parameterType="MdAgcCheck" resultMap="MdAgcCheckResult">
+        <include refid="selectMdAgcCheckVo"/>
+        <where>  
+            <if test="time != null  and time != ''"> and time = #{time}</if>
+            <if test="standName != null  and standName != ''"> and stand_name like concat('%', #{standName}, '%')</if>
+            <if test="availability != null "> and availability = #{availability}</if>
+            <if test="speed != null "> and speed = #{speed}</if>
+            <if test="qualified != null "> and qualified = #{qualified}</if>
+            <if test="responseTime != null "> and response_time = #{responseTime}</if>
+            <if test="availabilityScore != null "> and availability_score = #{availabilityScore}</if>
+            <if test="speedScore != null "> and speed_score = #{speedScore}</if>
+            <if test="qualifiedScore != null "> and qualified_score = #{qualifiedScore}</if>
+            <if test="responseTimeScore != null "> and response_time_score = #{responseTimeScore}</if>
+            <if test="sumScore != null "> and sum_score = #{sumScore}</if>
+        </where>
+    </select>
+    
+    <select id="selectMdAgcCheckById" parameterType="Long" resultMap="MdAgcCheckResult">
+        <include refid="selectMdAgcCheckVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMdAgcCheck" parameterType="MdAgcCheck" useGeneratedKeys="true" keyProperty="id">
+        insert into md_agc_check
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="time != null">time,</if>
+            <if test="standName != null">stand_name,</if>
+            <if test="availability != null">availability,</if>
+            <if test="speed != null">speed,</if>
+            <if test="qualified != null">qualified,</if>
+            <if test="responseTime != null">response_time,</if>
+            <if test="availabilityScore != null">availability_score,</if>
+            <if test="speedScore != null">speed_score,</if>
+            <if test="qualifiedScore != null">qualified_score,</if>
+            <if test="responseTimeScore != null">response_time_score,</if>
+            <if test="sumScore != null">sum_score,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="time != null">#{time},</if>
+            <if test="standName != null">#{standName},</if>
+            <if test="availability != null">#{availability},</if>
+            <if test="speed != null">#{speed},</if>
+            <if test="qualified != null">#{qualified},</if>
+            <if test="responseTime != null">#{responseTime},</if>
+            <if test="availabilityScore != null">#{availabilityScore},</if>
+            <if test="speedScore != null">#{speedScore},</if>
+            <if test="qualifiedScore != null">#{qualifiedScore},</if>
+            <if test="responseTimeScore != null">#{responseTimeScore},</if>
+            <if test="sumScore != null">#{sumScore},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMdAgcCheck" parameterType="MdAgcCheck">
+        update md_agc_check
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="time != null">time = #{time},</if>
+            <if test="standName != null">stand_name = #{standName},</if>
+            <if test="availability != null">availability = #{availability},</if>
+            <if test="speed != null">speed = #{speed},</if>
+            <if test="qualified != null">qualified = #{qualified},</if>
+            <if test="responseTime != null">response_time = #{responseTime},</if>
+            <if test="availabilityScore != null">availability_score = #{availabilityScore},</if>
+            <if test="speedScore != null">speed_score = #{speedScore},</if>
+            <if test="qualifiedScore != null">qualified_score = #{qualifiedScore},</if>
+            <if test="responseTimeScore != null">response_time_score = #{responseTimeScore},</if>
+            <if test="sumScore != null">sum_score = #{sumScore},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMdAgcCheckById" parameterType="Long">
+        delete from md_agc_check where id = #{id}
+    </delete>
+
+    <delete id="deleteMdAgcCheckByIds" parameterType="String">
+        delete from md_agc_check where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
